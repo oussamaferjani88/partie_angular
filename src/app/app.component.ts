@@ -9,25 +9,21 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent implements OnInit {
   title = 'Sport_Genre';
-  constructor (public authService: AuthService  ,private  router : Router) {}
-  
-  
-  ngOnInit () {
+  constructor(public authService: AuthService, private router: Router) { }
 
-    let isloggedin : string ;
-    let loggedUser : string ;
-    isloggedin = localStorage.getItem('isloggedIn')!;
-    loggedUser = localStorage.getItem('loggedUser')!;
-    if (isloggedin!="true" || !loggedUser)
+
+  ngOnInit() {
+
+    this.authService.loadToken();
+    if (this.authService.getToken() == null ||
+      this.authService.isTokenExpired())
       this.router.navigate(['/login']);
-    else
-      this.authService.setLoggedUserFromLocalStorage(loggedUser);
-    }
-    
-    onLogout()
-    {
-      this.authService.logout();
-    }
+
+  }
+
+  onLogout() {
+    this.authService.logout();
+  }
 
 
 }
